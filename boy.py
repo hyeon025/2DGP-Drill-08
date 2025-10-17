@@ -1,5 +1,5 @@
 from pico2d import load_image, get_time
-from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT
+from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_a
 
 from state_machine import StateMachine
 
@@ -17,6 +17,9 @@ def space_down(e):
 
 def time_out(e):
     return e[0] == 'TIME_OUT'
+
+def a_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
 
 class AutoRun:
     def __init__(self, boy):
@@ -102,7 +105,7 @@ class Boy:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-            self.IDLE:{left_up:self.RUN,left_down:self.RUN,right_down : self.RUN,right_up:self.RUN},
+            self.IDLE:{a_down:self.AUTORUN,left_up:self.RUN,left_down:self.RUN,right_down : self.RUN,right_up:self.RUN},
             self.RUN: {right_down: self.IDLE, left_down : self.IDLE, right_up:self.IDLE,left_up:self.IDLE}
             })
 
