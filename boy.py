@@ -26,7 +26,7 @@ class AutoRun:
         self.boy = boy
 
     def enter(self, e):
-        pass
+        self.boy.dir = self.boy.face_dir
 
     def exit(self, e):
         pass
