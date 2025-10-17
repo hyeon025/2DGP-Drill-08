@@ -18,6 +18,10 @@ def space_down(e):
 def time_out(e):
     return e[0] == 'TIME_OUT'
 
+class AutoRun:
+    pass
+
+
 class Run:
 
     def __init__(self, boy):
