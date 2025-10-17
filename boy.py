@@ -98,6 +98,7 @@ class Boy:
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
+        self.AUTORUN = AutoRun(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
