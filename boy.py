@@ -123,7 +123,7 @@ class Boy:
             {
             self.IDLE:{a_down:self.AUTORUN,left_up:self.RUN,left_down:self.RUN,right_down : self.RUN,right_up:self.RUN},
             self.RUN: {right_down: self.IDLE, left_down : self.IDLE, right_up:self.IDLE,left_up:self.IDLE},
-            self.AUTORUN:{a_up:self.AUTORUN,time_out:self.IDLE},
+            self.AUTORUN:{a_up:self.AUTORUN,time_out:self.IDLE,left_down: self.RUN,right_down:self.RUN},
             })
 
     def update(self):
