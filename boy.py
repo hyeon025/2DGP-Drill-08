@@ -41,12 +41,12 @@ class AutoRun:
             self.boy.state_machine.handle_state_event(('TIME_OUT', 0))
 
         if self.boy.face_dir == 1 and self.boy.dir == 1:
-            if self.boy.x <= 800:
+            if self.boy.x <= 780:
                 self.boy.x += self.boy.dir * 10
             else:
                 self.boy.face_dir = self.boy.dir = -1
         elif self.boy.face_dir == -1 and self.boy.dir == -1:
-            if self.boy.x >= 0:
+            if self.boy.x >= 20:
                 self.boy.x += self.boy.dir * 10
             else:
                 self.boy.face_dir = self.boy.dir = 1
