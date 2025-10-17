@@ -53,9 +53,9 @@ class AutoRun:
 
     def draw(self):
         if self.boy.face_dir == 1:  # right
-            self.boy.image.clip_draw(self.boy.frame * 100, 100, 100, 100, self.boy.x, self.boy.y + 20,200,200)
+            self.boy.image.clip_draw(self.boy.frame * 100, 100, 100, 100, self.boy.x, 120,200,200)
         else:  # face_dir == -1: # left
-            self.boy.image.clip_draw(self.boy.frame * 100, 0, 100, 100, self.boy.x, self.boy.y + 20,200,200)
+            self.boy.image.clip_draw(self.boy.frame * 100, 0, 100, 100, self.boy.x, 120,200,200)
 
 
 class Run:
@@ -86,7 +86,7 @@ class Run:
         else: # face_dir == -1: # left
             self.boy.image.clip_draw(self.boy.frame * 100, 0, 100, 100, self.boy.x, self.boy.y)
 
-class Idle:
+class Sleep:
 
     def __init__(self, boy):
         self.boy = boy
@@ -98,7 +98,31 @@ class Idle:
         pass
 
     def do(self):
+        self.boy.frame = 0
+
+    def draw(self):
+        if self.boy.face_dir == 1: # right
+            self.boy.image.clip_composite_draw(self.boy.frame * 100, 300, 100, 100,3.141592/2,'', self.boy.x,60,100,100)
+        else: # face_dir == -1: # left
+            self.boy.image.clip_composite_draw(self.boy.frame * 100, 200, 100, 100,-3.141592/2,'', self.boy.x,60,100,100)
+
+
+class Idle:
+
+    def __init__(self, boy):
+        self.boy = boy
+
+    def enter(self,e):
+        self.boy.dir = 0
+        self.boy.wait_start_time = get_time()
+
+    def exit(self,e):
+        pass
+
+    def do(self):
         self.boy.frame = (self.boy.frame + 1) % 8
+        if get_time() - self.boy.wait_start_time > 5:
+            self.boy.state_machine.handle_state_event(('TIME_OUT', None))
 
     def draw(self):
         if self.boy.face_dir == 1: # right
@@ -117,13 +141,15 @@ class Boy:
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
+        self.SLEEP = Sleep(self)
         self.AUTORUN = AutoRun(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-            self.IDLE:{a_down:self.AUTORUN,left_up:self.RUN,left_down:self.RUN,right_down : self.RUN,right_up:self.RUN},
+            self.IDLE:{a_down:self.AUTORUN,left_up:self.RUN,left_down:self.RUN,right_down : self.RUN,right_up:self.RUN,time_out:self.SLEEP},
             self.RUN: {right_down: self.IDLE, left_down : self.IDLE, right_up:self.IDLE,left_up:self.IDLE},
             self.AUTORUN:{a_up:self.AUTORUN,time_out:self.IDLE,left_down: self.RUN,right_down:self.RUN},
+            self.SLEEP:{space_down:self.IDLE}
             })
 
     def update(self):
